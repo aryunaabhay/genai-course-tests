@@ -1,19 +1,16 @@
 from listings_generator import ListingsGenerator
 from vector_db_manager import VectorDBManager
+from apartment_listing_vector import ApartmentListingWithVector
+from vector_db_manager import embeddings
+from conversation_query import ApartmentQuery
 
-import numpy as np
-
-apts = ListingsGenerator().generateAparments()
+#apts = ListingsGenerator().generateAparments()
 vector_db_manager = VectorDBManager()
-vector_db_manager.save_apartments_in_vector_db(apts)
+#vector_db_manager.save_apartments_in_vector_db(apts)
 
-#langchain 
-random_vector = np.random.rand(256)
-print(vector_db_manager.apartments_table.search(random_vector).limit(2))
+apartment_query = ApartmentQuery().create_query_obj_from_conversation()
+vector_search = embeddings.embed_query(apartment_query.description + apartment_query.neighborhood_description)
+search_result = vector_db_manager.apartments_table.search(vector_search).limit(1).to_pydantic(ApartmentListingWithVector)
+print(search_result)
 
-# questions and answers to colelct user preferences about listings
-# structure user preference and create query for search in vector db
-
-# search semantically 
-# each result augment with llm to highlight the thing user prefers
-# maintaining factual integrity
+# another query to llm  recreate descriptions from search of this apartment highlihting the user preference without losing factual integrity
