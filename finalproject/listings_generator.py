@@ -5,10 +5,10 @@ from apartment_listing import ApartmentListing
 from llm import llm
 
 class ListingsGenerator:
-    def generateAparments(self) -> List[ApartmentListing]:
+    def generate_aparments(self) -> List[ApartmentListing]:
         # generate listings from llm with format and translate to pydantic models
         generate_listings_prompt = """Generate 10 apartment listings including the following information Neighborhood, Price, Bedrooms, Bathrooms, House Size, 
-        Description, Neighborhood Description, make them in different sizes neighborhoods, prices and so on.
+        , Neighborhood Description and a Description that contains previous information like price, bedrooms, bathrooms, house size and other details about the apartment. make them in different sizes, neighborhoods, prices and so on.
         {format_instructions}
         """
         parser = PydanticOutputParser(pydantic_object= ApartmentListing)
